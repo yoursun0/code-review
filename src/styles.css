@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+@theme {
+  --color-stage: #12110f;
+  --color-stage-2: #1c1916;
+  --color-paper: #f6f1e8;
+  --color-ink: #1a1612;
+  --color-cinnabar: #c23a2e;
+  --color-gold: #e0b15a;
+  --color-gold-deep: #c8963e;
+  --color-muted: #a3988c;
+  --color-line: #3a342c;
+  --color-soft: #2a2622;
+  --font-sans: "Source Sans 3", "Segoe UI", sans-serif;
+  --font-serif: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --radius-card: 1.25rem;
+}
+
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  html,
+  body {
+    background: var(--color-stage);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background: var(--color-cinnabar);
+    color: var(--color-paper);
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(12px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes flow {
+  0% {
+    transform: translateX(-12%);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(108%);
+    opacity: 0;
+  }
+}
+
+@keyframes pile-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) rotate(-2deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pulse-ring {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-cinnabar) 45%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 10px transparent;
+  }
+}
+
+.rise > * {
+  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.rise > *:nth-child(2) {
+  animation-delay: 0.06s;
+}
+.rise > *:nth-child(3) {
+  animation-delay: 0.12s;
+}
+.rise > *:nth-child(4) {
+  animation-delay: 0.18s;
+}
+.rise > *:nth-child(5) {
+  animation-delay: 0.24s;
+}
+.rise > *:nth-child(6) {
+  animation-delay: 0.3s;
+}
+.rise > *:nth-child(7) {
+  animation-delay: 0.36s;
+}
+.rise > *:nth-child(8) {
+  animation-delay: 0.42s;
+}
+
+.flow-line {
+  animation: flow 2.8s linear infinite;
+}
+
+.pile-card {
+  animation: pile-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.step-live {
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+
+@keyframes growY {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes scan {
+  0% {
+    top: 8%;
+  }
+  100% {
+    top: 82%;
+  }
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.92);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.bar-grow {
+  transform-origin: bottom;
+  animation: growY 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.scan-bar {
+  animation: scan 2.6s ease-in-out infinite alternate;
+}
+
+.num-pop {
+  animation: pop 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise > *,
+  .flow-line,
+  .pile-card,
+  .step-live,
+  .bar-grow,
+  .scan-bar,
+  .num-pop {
+    animation: none !important;
+  }
+}
