@@ -69,14 +69,22 @@ export function RiskSort() {
   const correct = CASES.filter((c) => picks[c.id] === c.tier).length;
 
   return (
-    <div>
-      <div className="mb-3 flex items-baseline justify-end">
-        <p className="font-serif text-3xl text-gold">
-          {correct}
-          <span className="text-base text-muted">/{CASES.length}</span>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="mb-3 grid gap-2 sm:grid-cols-3">
+        <p className="rounded-2xl bg-paper px-3 py-2 text-ink">
+          <span className="font-serif text-2xl">Low</span>
+          <span className="mt-1 block text-sm leading-snug">No second person. Docs, a flag you can kill, tests only.</span>
+        </p>
+        <p className="rounded-2xl bg-gold px-3 py-2 text-ink">
+          <span className="font-serif text-2xl">Medium</span>
+          <span className="mt-1 block text-sm leading-snug">One person. Behavior changes. Cache, a prompt, a new pattern.</span>
+        </p>
+        <p className="rounded-2xl bg-cinnabar px-3 py-2 text-paper">
+          <span className="font-serif text-2xl">High</span>
+          <span className="mt-1 block text-sm leading-snug">Two people. Money, identity, or a one-way door.</span>
         </p>
       </div>
-      <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="grid flex-1 content-start gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {CASES.map((c) => {
           const pick = picks[c.id];
           const shown = pick != null;
@@ -113,6 +121,9 @@ export function RiskSort() {
           );
         })}
       </ul>
+      <p className="mt-2 text-right text-sm text-muted">
+        {correct}/{CASES.length} match the bar. The author writes the tier. The reviewer may upgrade it.
+      </p>
     </div>
   );
 }

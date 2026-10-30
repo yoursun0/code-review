@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { CodeFlood, SplitBars } from "@/deck/scenes";
 import { AuthorStamp, Description, Monday, ReviewerMove, TwoJobs } from "@/deck/practice";
 import { SimStage } from "@/deck/SimStage";
+import { RiskSort } from "@/deck/Stages";
 
 const SOURCES: { title: string; detail: string; href?: string }[] = [
   {
@@ -248,6 +249,40 @@ const slides: Slide[] = [
     body: (
       <div className="flex min-h-0 flex-1 flex-col">
         <AuthorStamp />
+      </div>
+    ),
+  },
+  {
+    id: "risk",
+    kicker: "Author",
+    nav: "Low, medium, high",
+    script: {
+      see: "Three definitions on top. Eight changes underneath. The room taps Low, Med, or High. The line that appears is the bar, plus why.",
+      say: [
+        "Low means no second person, once the checks pass. A README typo. Copy behind a flag you can turn off. Tests only, no product code.",
+        "Medium means one person. The behavior changes, but it is not money or identity. The caching layer. A system prompt, because the next change will copy it.",
+        "High means two people. Interest or a fee. Login, session, or permissions. A migration that drops a column, because revert will not undo it.",
+        "The author writes this tier on the pull request. The reviewer does not have to discover it. The reviewer may raise it. A bot never counts as one of the humans.",
+      ],
+      do: "Read the three definitions first. Then let them classify two or three cards out loud before you tap. If they miss, read the correction.",
+      terms: [
+        {
+          name: "Low",
+          meaning: "No behavior change, or you can turn it off. Zero extra humans.",
+        },
+        {
+          name: "Medium",
+          meaning: "Behavior changes. One human. Not money, not identity, not a one-way door.",
+        },
+        {
+          name: "High",
+          meaning: "Money, identity, or one-way. Two humans. Whoever prompted the agent still owns the pull request.",
+        },
+      ],
+    },
+    body: (
+      <div className="flex min-h-0 flex-1 flex-col">
+        <RiskSort />
       </div>
     ),
   },
