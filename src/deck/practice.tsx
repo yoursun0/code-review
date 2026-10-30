@@ -150,8 +150,7 @@ const MOVES = [
     id: "low",
     title: "Low and two-way",
     move: "Approve",
-    comment:
-      "Low. Two-way. Flag named. Test attached. Approved. I did not read every line.",
+    comment: "Low. Two-way. Flag named. Test attached. Approved. I did not read every line.",
   },
   {
     id: "high",
@@ -209,6 +208,36 @@ export function Monday() {
           <li>High or one-way: read only the place they named.</li>
         </ol>
       </article>
+    </div>
+  );
+}
+
+export function ShortTerm() {
+  return (
+    <div className="flex min-h-0 flex-1 flex-col gap-3">
+      <div>
+        <p className="text-sm tracking-widest text-gold uppercase">2026 · still two humans</p>
+        <h2 className="mt-1 font-serif text-3xl leading-tight sm:text-5xl">The second click moves. The rule does not.</h2>
+      </div>
+      <div className="grid min-h-0 flex-1 gap-3 sm:grid-cols-2">
+        <article className="rounded-3xl border border-line p-5 sm:p-6">
+          <p className="text-sm tracking-widest text-muted uppercase">Does not change</p>
+          <ul className="mt-3 space-y-2 text-lg leading-snug sm:text-xl">
+            <li>Merge still needs two human approvals.</li>
+            <li>GitHub and CI stay as they are.</li>
+            <li>The task board stays as it is.</li>
+            <li>Medium and High: two engineers.</li>
+          </ul>
+        </article>
+        <article className="rounded-3xl bg-paper p-5 text-ink sm:p-6">
+          <p className="text-sm tracking-widest uppercase">Low only</p>
+          <ol className="mt-3 list-decimal space-y-2 pl-5 text-lg leading-snug sm:text-xl">
+            <li>Author writes Low, using the definition we just set.</li>
+            <li>One engineer reviews and approves.</li>
+            <li>The IT manager is the second approval. A click, not a second line read.</li>
+          </ol>
+        </article>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { CodeFlood, SplitBars } from "@/deck/scenes";
-import { AuthorStamp, Description, Monday, ReviewerMove, TwoJobs } from "@/deck/practice";
+import { AuthorStamp, Description, Monday, ReviewerMove, ShortTerm, TwoJobs } from "@/deck/practice";
 import { SimStage } from "@/deck/SimStage";
 import { RiskSort } from "@/deck/Stages";
 
@@ -317,11 +317,43 @@ const slides: Slide[] = [
         "Reviewers: if those lines are missing, one comment and send it back. If it is low and two-way, approve without a line read. If it is high or one-way, read only the place they named.",
         "Pick one pull request from this week. Rewrite the description in the four lines, out loud. Then the person who would review it says which of the three moves they take.",
       ],
-      do: "Do not invent a new policy in the room. Leave with those six lines.",
+      do: "Then the last slide. That is the 2026 rule. Do not leave it as a slogan.",
     },
     body: (
       <div className="flex min-h-0 flex-1 flex-col">
         <Monday />
+      </div>
+    ),
+  },
+  {
+    id: "rule",
+    kicker: "2026",
+    nav: "The rule",
+    script: {
+      see: "Left: what stays. Right: the only change, and only for a Low pull request. This is the action item. Say it slowly. The room is worried about losing the two-person control.",
+      say: [
+        "We are not turning off two-person review in 2026. GitHub still requires two human approvals to merge. CI does not change. The task board does not change.",
+        "Medium and High still need two engineers. That is unchanged.",
+        "The only difference is a pull request the author has labeled Low. Low means the definition on the earlier slide: docs, copy behind a flag you can turn off, or tests only. Not a feeling.",
+        "On that Low pull request, one engineer still reviews and approves. I take the second approval. I click the button. I am not doing a second line-by-line read.",
+        "So we remove one engineer review, and only on the boring ones. The control stays in GitHub. We just stop spending two engineers on it. That is the start for 2026, not a new pipeline.",
+      ],
+      terms: [
+        {
+          name: "Low",
+          meaning:
+            "No second engineer. Docs, a flag you can kill, or tests only. The author must write Low. If the label is missing or wrong, it is not Low.",
+        },
+        {
+          name: "Second approval",
+          meaning:
+            "Still required. For Low, the IT manager clicks it. For Medium and High, it is still a second engineer.",
+        },
+      ],
+    },
+    body: (
+      <div className="flex min-h-0 flex-1 flex-col">
+        <ShortTerm />
       </div>
     ),
   },
