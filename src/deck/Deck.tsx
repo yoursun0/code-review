@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
-import { AgentChart, BurdenChart } from "@/deck/Charts";
-import { CodeFlood, HumanWords, NumberReel, Questions, SplitBars, ThenNow } from "@/deck/scenes";
-import { AuthorContract, RiskSort, Stages } from "@/deck/Stages";
+import { CodeFlood, SplitBars } from "@/deck/scenes";
+import { AuthorStamp, Description, Monday, ReviewerMove, TwoJobs } from "@/deck/practice";
 import { SimStage } from "@/deck/SimStage";
 
 const SOURCES: { title: string; detail: string; href?: string }[] = [
@@ -49,6 +48,7 @@ type Script = {
   say: string[];
   do?: string;
   terms?: { name: string; meaning: string }[];
+  termsLabel?: string;
 };
 
 type Slide = {
@@ -68,8 +68,7 @@ const slides: Slide[] = [
       see: "Code is flying in from the left. The red line is a person. Cards pile on the right because they cannot read that fast.",
       say: [
         "Some of you got about 5× with AI. Some got about 2×. The review queue got worse for everyone.",
-        "Today is not about which model to buy. It is about where a human’s attention goes.",
-        "We do not have to read every line. We do have to decide which lines are worth a person.",
+        "The talk has two jobs. Authors must say the risk, the door, and where to look. Reviewers check that note. They do not start at line 1.",
       ],
     },
     body: (
@@ -152,9 +151,9 @@ const slides: Slide[] = [
     script: {
       see: "5 seconds against 30 minutes, over the same flood of code. The red line is still attention.",
       say: [
-        "Thoughtworks, June 2026: an agent can write about 500 lines in five seconds.",
-        "A careful human still needs about 30 minutes for those same lines.",
-        "Reading harder is not a plan. If code arrives faster than anyone can read it, line-by-line review becomes a queue.",
+        "Thoughtworks, June 2026: an agent can write about 500 lines in five seconds. A careful human still needs about 30 minutes.",
+        "Most of those 30 minutes is not reading code. It is the reviewer reconstructing what the author never wrote: where to look, and whether this can be undone.",
+        "That is the rest of the hour. Two jobs. Author first.",
       ],
     },
     body: (
@@ -163,201 +162,131 @@ const slides: Slide[] = [
           <p className="font-serif text-6xl text-gold sm:text-8xl">5s</p>
           <p className="text-right font-serif text-6xl sm:text-8xl">30m</p>
         </div>
-        <CodeFlood />
+        <CodeFlood>
+          <p className="max-w-xl font-serif text-3xl leading-tight sm:text-4xl">
+            The 30 minutes is the note the author never wrote.
+          </p>
+        </CodeFlood>
       </div>
     ),
   },
   {
-    id: "world",
-    kicker: "2026, measured",
-    nav: "Four numbers",
+    id: "jobs",
+    kicker: "The point",
+    nav: "Two jobs",
     script: {
-      see: "One number at a time. It changes on its own. Click the number to jump. The dots show which of the four you are on.",
+      see: "Left card is the author. Right card is the reviewer. This is the whole talk. Stay here until the room can say both jobs back to you.",
       say: [
-        "40%. In September 2026, 40% of GitHub pull requests were started by an agent. In March it was 17%.",
-        "6×. That month was about 110 million agent pull requests, about six times March.",
-        "90%. Claude writes about 90% of Claude Code. From June to September their merged pull requests doubled, and reverts fell by more than 40%. Volume can rise while reverts fall, but only with a harness.",
-        "12×. Their monorepo went from 2,500 changes a day in May to more than 30,000 in September.",
-      ],
-      do: "Say the line that matches the number on screen. Do not read all four while one number is showing.",
-    },
-    body: (
-      <div className="flex min-h-0 flex-1 flex-col">
-        <NumberReel />
-      </div>
-    ),
-  },
-  {
-    id: "shipped",
-    kicker: "Output is not delivery",
-    nav: "More code",
-    script: {
-      see: "Gold bars mean more activity. Red bars mean review got heavier. The last bar, software actually shipped, did not move.",
-      say: [
-        "A Harvard study across hundreds of software firms: more lines of code, more commits, more pull requests, more tasks finished.",
-        "Also longer to merge, more review comments, and about 91% more time spent reviewing AI output. That last red bar is Bain, September 2026.",
-        "Software leaving the building: no real increase. Pull requests sent back for changes nearly doubled. That one is not on the chart.",
+        "The author writes four lines before asking for a review: the risk, the door, where to look, and the proof.",
+        "Risk is low, medium, or high. Door is two-way or one-way. Two-way means we can turn it off or revert it. One-way means revert will not undo the damage: a dropped column, money already charged, data deleted.",
+        "The reviewer does not discover those facts by reading the diff. If the four lines are missing, the only review is: send it back.",
+        "If it is low and two-way, approve it. If it is high or one-way, read only the place the author named.",
       ],
     },
     body: (
       <div className="flex min-h-0 flex-1 flex-col">
-        <h1 className="font-serif text-4xl sm:text-5xl">More code. Same ship.</h1>
-        <BurdenChart />
+        <TwoJobs />
       </div>
     ),
   },
   {
-    id: "who",
-    kicker: "Who opens the pull request",
-    nav: "Agents",
+    id: "desc",
+    kicker: "Author",
+    nav: "The description",
     script: {
-      see: "The share of pull requests opened by an agent. 17% in March. 40% in September.",
+      see: "A real pull request description. Bad is the empty one. Use this is the template. The four words under the card are the framework: Risk, Door, Where, Proof.",
       say: [
-        "The person who opens the change is often no longer a person.",
-        "GitHub’s CEO, Thomas Dohmke: the first move is now directing an agent, and review is how developers shape what comes back.",
-        "Agent pull requests touch more files. By September they were also merging a little faster. Teams had learned how to check them.",
+        "Start on Bad. This is why reviews take 30 minutes. The reviewer has to guess the risk and where to look.",
+        "Switch to Use this. Read it aloud. Risk High, because it charges customers. Door Two-way, because the flag lateFeeCap turns the old formula back on. Where: fee.ts, one branch, skip the generated client. Proof: a unit test and two statement screenshots.",
+        "This is the framework. Four lines, in this order, on every pull request from Monday. Not a novel. Not 'Claude did it.'",
+        "The author owns the stamp. If they are unsure, they write High. The reviewer may upgrade a stamp. They should not have to invent it.",
       ],
-    },
-    body: (
-      <div className="flex min-h-0 flex-1 flex-col justify-center">
-        <p className="font-serif text-4xl sm:text-6xl">March 17. September 40.</p>
-        <AgentChart />
-      </div>
-    ),
-  },
-  {
-    id: "shift",
-    kicker: "Stop reading every line",
-    nav: "Old and new",
-    script: {
-      see: "Left: a bar scanning every line. That is review one or two years ago. Right: the same kind of comments, split into Rules, Tests, and Judgment.",
-      say: [
-        "We used to start at line 1 and talk about style.",
-        "About 45% of repeated comments are a rule a machine can check. 30% a test can catch. 25% is real judgment. Aviator, October 2026.",
-        "Still read line by line for money, login, secrets, migrations, a new design, and anyone new to the code.",
-        "Large pull requests are where bugs hide. Over about 400 lines, a later bug-fix was about four times more likely.",
-      ],
-    },
-    body: (
-      <div className="flex min-h-0 flex-1 flex-col">
-        <ThenNow />
-      </div>
-    ),
-  },
-  {
-    id: "flow",
-    kicker: "How a strong team reviews",
-    nav: "Four stages",
-    script: {
-      see: "Four steps. They light up on their own. This is how the Claude Code team reviews, from the video.",
-      say: [
-        "Prove. Before the pull request exists, show that it runs: tests, a build, or a screenshot. A fresh agent reads the diff. If you cannot prove it runs, do not open it.",
-        "Check. CI blocks. An AI review may comment, but only if a second agent agrees. Security can block the merge.",
-        "Merge. Rerun checks against latest main. Ship behind a flag. A bot approval never counts as a person.",
-        "Watch. You will have incidents. Detect them fast and roll back. Page a human, not a model.",
-      ],
-      do: "Click a circle to hold that step while you talk. Click another to move.",
-    },
-    body: (
-      <div className="flex min-h-0 flex-1 flex-col">
-        <Stages />
-      </div>
-    ),
-  },
-  {
-    id: "risk",
-    kicker: "Not every diff deserves two people",
-    nav: "Risk",
-    script: {
-      see: "Eight real kinds of change. The room taps Low, Med, or High. The answer that appears is the Claude Code bar, not a bank policy yet.",
-      say: [
-        "Low means the checks passed and no extra human is required. Medium means one human. High means two.",
-        "The tier follows the change, not how senior the author is.",
-        "Whoever prompted the agent still owns the pull request. An approval covers one commit only. A new push means approve again.",
-      ],
-      do: "Let them guess out loud, then tap. If it is wrong, read the correction on the card.",
-    },
-    body: (
-      <div className="flex min-h-0 flex-1 flex-col">
-        <RiskSort />
-      </div>
-    ),
-  },
-  {
-    id: "author",
-    kicker: "The author’s job",
-    nav: "The brief",
-    script: {
-      see: "A review that starts at 45 minutes. Each chip is something the author already did. Tap them and the number falls.",
-      say: [
-        "Opening a pull request is asking for someone’s time. ‘Fix stuff. Claude did it.’ is not a request anyone can judge.",
-        "The author has to say the problem, how to turn it off, the proof, where to look, that it is small enough, and that they can explain it without the model.",
-        "When those are there, this is about a 12-minute review. If they are missing, send it back. That is the job, not a favor.",
-      ],
-      do: "Tap the chips one at a time so the room watches 45 become 12.",
-    },
-    body: (
-      <div className="flex min-h-0 flex-1 flex-col">
-        <AuthorContract />
-      </div>
-    ),
-  },
-  {
-    id: "humans",
-    kicker: "What is still yours",
-    nav: "Humans",
-    script: {
-      see: "Four words. This is the whole human job. Everything else can leave the queue.",
-      say: [
-        "Decide. Whether to build it, and how wide the change is allowed to be.",
-        "Evidence. Read tests, screenshots, and what the fresh agent found. Not every generated line.",
-        "Sign. Money, identity, data, and anything that will become the next pattern.",
-        "Own. The person who merges it can be paged. The model cannot.",
-        "Their target: most pull requests merge with at most one human, and that human can be the author, as long as reverts and incidents stay flat.",
+      do: "Click Bad, then Use this. Read the good description slowly. It is the thing you want them to copy.",
+      termsLabel: "THE FOUR LINES",
+      terms: [
+        {
+          name: "Risk",
+          meaning:
+            "Low: no behavior change, or a kill switch. No second person. Medium: behavior changes, one person. High: money, identity, or a one-way door. Two people.",
+        },
+        {
+          name: "Door",
+          meaning:
+            "Two-way: a flag, a revert, or a copy change puts it back. One-way: revert does not undo it. Dropped column, charged fee already collected, deleted rows, leaked secret.",
+        },
+        {
+          name: "Where",
+          meaning: "The file and the branch to read, plus what to skip. If this line is missing, the reviewer is being asked to search.",
+        },
+        {
+          name: "Proof",
+          meaning: "What already ran before anyone was asked: a test name, a screenshot, or the flag. Not a promise to test later.",
+        },
       ],
     },
     body: (
       <div className="flex min-h-0 flex-1 flex-col">
-        <HumanWords />
+        <Description />
       </div>
     ),
   },
   {
-    id: "hour",
-    kicker: "This hour",
-    nav: "Discuss",
+    id: "stamp",
+    kicker: "Author",
+    nav: "The stamp",
     script: {
-      see: "One discussion question at a time. It rotates. Click it to move on.",
+      see: "Four changes. Click one. The card is what the author should already have written. This is not a quiz for the reviewer.",
       say: [
-        "Which changes can the author plus the machines sign, with no second person reading line by line?",
-        "Which three pieces of evidence are mandatory before anyone asks for a review?",
-        "Someone opens 1,500 lines and no brief. What is the professional response?",
+        "The author classifies the change. The reviewer does not.",
+        "README typo: Low, two-way, one line, no proof needed. No second person.",
+        "Copy behind a flag: still Low and two-way, because you can turn it off. Name the flag. Attach on and off screenshots.",
+        "Late-fee formula: High, because it charges customers. Two-way only if there is a flag. Name the branch in fee.ts. Two people.",
+        "Drop a column: High and one-way. Revert will not bring the data back. Say that in the description. Two people.",
       ],
-      do: "Ask the question that is on screen, then wait. Use one real pull request from this week. Leave with one change for Monday, not a new framework.",
+      do: "Click them in that order: README, copy, late fee, drop a column. After each one ask: who writes this, the author or the reviewer? The answer is the author.",
     },
     body: (
       <div className="flex min-h-0 flex-1 flex-col">
-        <Questions />
+        <AuthorStamp />
       </div>
     ),
   },
   {
-    id: "close",
-    kicker: "Leave with this",
-    nav: "Close",
+    id: "reviewer",
+    kicker: "Reviewer",
+    nav: "First two minutes",
     script: {
-      see: "One question. Read it, then stop.",
+      see: "Three buttons. Each one is a finished review comment. This is the reviewer's whole job in the first two minutes.",
       say: [
-        "Code review is not reading every line. It is deciding how many minutes this change deserves.",
-        "Approve is a signature. Not a courtesy.",
+        "First button. The four lines are missing. You do not open the diff to be helpful. You send it back with that comment.",
+        "Second. Low and two-way, flag named, test attached. You approve. You say out loud that you did not read every line. That is allowed. That is the point.",
+        "Third. High, or one-way. You read only the place they named, and the proof. You do not tour the generated client.",
+        "Fear of approving is what froze the queue. A low two-way change with the four lines is safe to approve.",
       ],
-      do: "If there is a minute left, ask each person which kind of change they will stop reviewing line by line.",
+      do: "Click the three buttons and read each comment as if you are posting it.",
     },
     body: (
-      <div className="flex min-h-0 flex-1 flex-col justify-center">
-        <h1 className="max-w-4xl font-serif text-5xl leading-tight sm:text-7xl">
-          How many minutes does this change deserve?
-        </h1>
+      <div className="flex min-h-0 flex-1 flex-col">
+        <ReviewerMove />
+      </div>
+    ),
+  },
+  {
+    id: "monday",
+    kicker: "From Monday",
+    nav: "Monday",
+    script: {
+      see: "Two lists. Left is what authors change. Right is what reviewers change. Leave this up for the discussion.",
+      say: [
+        "Authors: every pull request has Risk, Door, Where, Proof. You name the risk. You say if it is one-way.",
+        "Reviewers: if those lines are missing, one comment and send it back. If it is low and two-way, approve without a line read. If it is high or one-way, read only the place they named.",
+        "Pick one pull request from this week. Rewrite the description in the four lines, out loud. Then the person who would review it says which of the three moves they take.",
+      ],
+      do: "Do not invent a new policy in the room. Leave with those six lines.",
+    },
+    body: (
+      <div className="flex min-h-0 flex-1 flex-col">
+        <Monday />
       </div>
     ),
   },
@@ -378,7 +307,7 @@ function ScriptPanel({ script, onClose }: { script: Script; onClose: () => void 
           </ol>
           {script.terms ? (
             <dl className="mt-3 max-w-3xl space-y-2">
-              <p className="text-xs tracking-widest text-gold">THE CONTROLS</p>
+              <p className="text-xs tracking-widest text-gold">{script.termsLabel ?? "THE CONTROLS"}</p>
               {script.terms.map((term) => (
                 <div key={term.name}>
                   <dt className="font-serif text-lg text-gold">{term.name}</dt>
